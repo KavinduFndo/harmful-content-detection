@@ -2,9 +2,18 @@ import type { AlertDetail, AlertSummary, DebugModelCheckRequest, User } from "./
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
-function authHeaders() {
+function authHeaders(): Record<string, string> {
   const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  const headers: Record<string, string> = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+}
+
+function jsonAuthHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const token = localStorage.getItem("token");
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
 }
 
 export async function login(email: string, password: string): Promise<string> {
@@ -40,7 +49,7 @@ export async function fetchAlert(id: number): Promise<AlertDetail> {
 export async function patchAlert(id: number, payload: { status?: string; assigned_to?: number }) {
   const res = await fetch(`${API_BASE}/alerts/${id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json", ...authHeaders() },
+    headers: jsonAuthHeaders(),
     body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error("Failed to update alert");
@@ -53,7 +62,7 @@ export async function sendFeedback(
 ) {
   const res = await fetch(`${API_BASE}/alerts/${id}/feedback`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders() },
+    headers: jsonAuthHeaders(),
     body: JSON.stringify(payload)
   });
   if (!res.ok) throw new Error("Failed to submit feedback");
@@ -69,7 +78,7 @@ export async function listUsers(): Promise<User[]> {
 export async function debugModelCheck(payload: DebugModelCheckRequest): Promise<Record<string, unknown>> {
   const res = await fetch(`${API_BASE}/debug/model-check`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...authHeaders() },
+    headers: jsonAuthHeaders(),
     body: JSON.stringify(payload)
   });
   if (!res.ok) {
