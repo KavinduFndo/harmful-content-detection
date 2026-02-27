@@ -60,6 +60,7 @@ Copy/edit `.env` if needed:
 - `VIOLENCE_CLASS_KEYWORDS`
 - `FUSION_TEXT_W`, `FUSION_VIDEO_W`, `FUSION_AUDIO_W`
 - `ALERT_THRESHOLD`
+- **Hugging Face (optional):** `HF_MODEL_URL`, `HF_API_TOKEN`, `HF_TIMEOUT_SEC` — see [`hf-space-docker/README.md`](hf-space-docker/README.md) for a Docker-based Space that implements the text-classifier API.
 
 ## Run with Docker
 

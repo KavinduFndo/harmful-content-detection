@@ -36,7 +36,7 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg2://hcd_user:hcd_password@postgres:5432/harmful_content
       REDIS_URL: redis://redis:6379/0
-      CORS_ORIGINS: http://localhost:5173
+      CORS_ORIGINS: http://localhost:5173,https://harmful-content-detection-2qvs.vercel.app
       MEDIA_ROOT: /app/storage
       DEMO_INPUT_DIR: /app/data/demo_inputs
     volumes:

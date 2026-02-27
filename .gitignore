@@ -1,0 +1,4 @@
+# Local env and DO deploy spec (contains encrypted secrets)
+.env
+.env.local
+.do/app-deploy.yaml

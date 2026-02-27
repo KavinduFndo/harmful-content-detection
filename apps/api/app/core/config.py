@@ -1,11 +1,18 @@
 from functools import lru_cache
+from pathlib import Path
 from typing import List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# Load .env from project root when running from apps/api (so CORS_ORIGINS etc. are found)
+_config_dir = Path(__file__).resolve().parent
+_project_root = _config_dir.parent.parent.parent
+_env_file = _project_root / ".env"
+_env_file = str(_env_file) if _env_file.exists() else ".env"
+
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(env_file=_env_file, env_file_encoding="utf-8", extra="ignore")
 
     app_name: str = "Harmful Content Detector API"
     database_url: str = "postgresql+psycopg2://hcd_user:hcd_password@localhost:5432/harmful_content"
