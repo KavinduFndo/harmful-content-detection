@@ -22,7 +22,11 @@ def _start_alert_subscription(loop: asyncio.AbstractEventLoop) -> None:
         asyncio.run_coroutine_threadsafe(ws_manager.broadcast_json(payload), loop)
 
     def _run() -> None:
-        subscribe_alerts(_on_message)
+        import sys
+        try:
+            subscribe_alerts(_on_message)
+        except Exception as e:
+            print(f"[redis] Alert subscription stopped: {e}", file=sys.stderr, flush=True)
 
     thread = threading.Thread(target=_run, daemon=True)
     thread.start()
