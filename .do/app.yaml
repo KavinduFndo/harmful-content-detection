@@ -1,102 +1,51 @@
-name: harmful-content-detector
-region: sgp1
+name: harmful-content-detection
 
 services:
   - name: api
-    github:
-      repo: KavinduFndo/harmful-content-detection
-      branch: main
-      deploy_on_push: true
-    source_dir: apps/api
-    dockerfile_path: Dockerfile
+    dockerfile_path: apps/api/Dockerfile
+    source_dir: /
     run_command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    http_port: 8000
-    instance_count: 1
-    instance_size_slug: basic-xxs
-    health_check:
-      http_path: /health
+    http_port: 8080
+
     envs:
       - key: DATABASE_URL
         scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_DATABASE_URL
       - key: REDIS_URL
         scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_REDIS_URL
       - key: JWT_SECRET
         scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_JWT_SECRET
       - key: JWT_ALGORITHM
-        scope: RUN_TIME
         value: HS256
+        scope: RUN_TIME
       - key: JWT_EXPIRE_MINUTES
-        scope: RUN_TIME
         value: "120"
+        scope: RUN_TIME
       - key: DEMO_MODE
-        scope: RUN_TIME
         value: "false"
-      - key: NLP_ADAPTER_PATH
         scope: RUN_TIME
+      - key: NLP_ADAPTER_PATH
         value: /app/app/hf_infer.py
+        scope: RUN_TIME
       - key: HF_MODEL_URL
         scope: RUN_TIME
-        value: REPLACE_ME_HF_MODEL_URL
       - key: HF_API_TOKEN
         scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_HF_API_TOKEN
       - key: HF_TIMEOUT_SEC
-        scope: RUN_TIME
         value: "30"
+        scope: RUN_TIME
       - key: CORS_ORIGINS
         scope: RUN_TIME
-        value: https://REPLACE_ME_VERCEL_DOMAIN
 
 workers:
   - name: worker
-    github:
-      repo: KavinduFndo/harmful-content-detection
-      branch: main
-      deploy_on_push: true
-    source_dir: apps/api
-    dockerfile_path: Dockerfile
+    dockerfile_path: apps/api/Dockerfile
+    source_dir: /
     run_command: celery -A app.workers.celery_app.celery_app worker --loglevel=info
-    instance_count: 1
-    instance_size_slug: basic-xxs
+
     envs:
       - key: DATABASE_URL
         scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_DATABASE_URL
       - key: REDIS_URL
         scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_REDIS_URL
       - key: JWT_SECRET
         scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_JWT_SECRET
-      - key: JWT_ALGORITHM
-        scope: RUN_TIME
-        value: HS256
-      - key: JWT_EXPIRE_MINUTES
-        scope: RUN_TIME
-        value: "120"
-      - key: DEMO_MODE
-        scope: RUN_TIME
-        value: "false"
-      - key: NLP_ADAPTER_PATH
-        scope: RUN_TIME
-        value: /app/app/hf_infer.py
-      - key: HF_MODEL_URL
-        scope: RUN_TIME
-        value: REPLACE_ME_HF_MODEL_URL
-      - key: HF_API_TOKEN
-        scope: RUN_TIME
-        type: SECRET
-        value: REPLACE_ME_HF_API_TOKEN
-      - key: HF_TIMEOUT_SEC
-        scope: RUN_TIME
-        value: "30"
