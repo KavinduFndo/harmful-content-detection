@@ -5,7 +5,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 /** Derive WebSocket base from API base (https -> wss, http -> ws) so only VITE_API_BASE_URL is needed. */
 export const WS_BASE =
   import.meta.env.VITE_WS_BASE_URL ??
-  (API_BASE.replace(/^https?:/, (m) => (m === "https:" ? "wss:" : "ws:")).replace(/\/$/, ""));
+  (API_BASE.replace(/^https?:/, (m: string) => (m === "https:" ? "wss:" : "ws:")).replace(/\/$/, ""));
 
 function authHeaders(): Record<string, string> {
   const token = localStorage.getItem("token");
