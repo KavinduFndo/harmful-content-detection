@@ -53,6 +53,16 @@ services:
       - key: CORS_ORIGINS
         scope: RUN_TIME
         value: http://localhost:5173,https://harmful-content-detection-6t9g.vercel.app
+      - key: FACEBOOK_PAGE_ACCESS_TOKEN
+        scope: RUN_TIME
+        type: SECRET
+        value: REPLACE_ME_FACEBOOK_TOKEN
+      - key: FACEBOOK_PAGE_IDS
+        scope: RUN_TIME
+        value: REPLACE_ME_FACEBOOK_PAGE_IDS
+      - key: FACEBOOK_POLL_INTERVAL_SEC
+        scope: RUN_TIME
+        value: "60"
 
 workers:
   - name: worker

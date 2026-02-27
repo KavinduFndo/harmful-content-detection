@@ -11,7 +11,7 @@ from app.core.config import get_settings
 from app.db.session import Base, SessionLocal, engine
 from app.routers import alerts, auth, debug, ingest, users, ws
 from app.services.event_bus import subscribe_alerts
-from app.services.ingestion import start_demo_folder_watcher
+from app.services.ingestion import start_demo_folder_watcher, start_facebook_polling
 from app.services.ws_manager import ws_manager
 
 settings = get_settings()
@@ -54,6 +54,14 @@ async def lifespan(app: FastAPI):
             start_demo_folder_watcher(SessionLocal)
         except Exception as e:
             print(f"[startup] demo watcher failed: {e}", file=sys.stderr, flush=True)
+    if settings.facebook_page_access_token.strip() and settings.facebook_page_ids.strip():
+        try:
+            page_ids = [p.strip() for p in settings.facebook_page_ids.split(",") if p.strip()]
+            interval = max(30, settings.facebook_poll_interval_sec)
+            if start_facebook_polling(SessionLocal, page_ids=page_ids, interval_sec=interval):
+                print(f"[startup] Facebook polling started for pages: {page_ids}", file=sys.stderr, flush=True)
+        except Exception as e:
+            print(f"[startup] Facebook polling failed: {e}", file=sys.stderr, flush=True)
     print("[startup] API ready", file=sys.stderr, flush=True)
     yield
 
