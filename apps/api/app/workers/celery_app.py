@@ -24,6 +24,7 @@ celery_app.conf.update(
     enable_utc=True,
     task_acks_late=True,
     worker_prefetch_multiplier=1,
+    worker_concurrency=2,
     broker_use_ssl=_ssl_opts,
     redis_backend_use_ssl=_ssl_opts,
 )

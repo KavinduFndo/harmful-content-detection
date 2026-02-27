@@ -52,7 +52,7 @@ services:
         value: "30"
       - key: CORS_ORIGINS
         scope: RUN_TIME
-        value: https://harmful-content-detection-2qvs.vercel.app
+        value: http://localhost:5173,https://harmful-content-detection-6t9g.vercel.app
 
 workers:
   - name: worker
@@ -62,7 +62,7 @@ workers:
       deploy_on_push: true
     source_dir: apps/api
     dockerfile_path: apps/api/Dockerfile
-    run_command: celery -A app.workers.celery_app.celery_app worker --loglevel=info
+    run_command: celery -A app.workers.celery_app.celery_app worker --loglevel=info --concurrency=2
     instance_count: 1
     instance_size_slug: basic-xxs
     envs:
