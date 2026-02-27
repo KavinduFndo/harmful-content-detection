@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchAlerts, patchAlert } from "../api";
+import { fetchAlerts, patchAlert, WS_BASE } from "../api";
 import type { AlertSummary, Severity } from "../types";
 
-const WS_BASE = import.meta.env.VITE_WS_BASE_URL ?? "ws://localhost:8000";
 const CATEGORY_PRESETS: Array<{ id: string; label: string; patterns: RegExp[] }> = [
   { id: "all", label: "All", patterns: [] },
   { id: "harassment", label: "Harassment", patterns: [/harassment/i] },
