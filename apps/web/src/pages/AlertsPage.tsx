@@ -62,7 +62,7 @@ export function AlertsPage() {
     return category
       .replaceAll("_", " ")
       .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   }
 
@@ -72,7 +72,8 @@ export function AlertsPage() {
   }
 
   function scorePercent(alert: AlertSummary): number {
-    return Math.max(1, Math.min(99, Math.round(alert.fusion_score)));
+    const score = Number(alert.fusion_score);
+    return Math.max(1, Math.min(99, Math.round(Number.isFinite(score) ? score : 0)));
   }
 
   function timeAgo(value: string): string {
@@ -120,7 +121,7 @@ export function AlertsPage() {
       const cMatch =
         selected.id === "all"
           ? true
-          : selected.patterns.some((pattern) => pattern.test(a.category) || pattern.test(normalizedCategory));
+          : selected.patterns.some((pattern: RegExp) => pattern.test(a.category) || pattern.test(normalizedCategory));
       return qMatch && sMatch && cMatch;
     });
   }, [alerts, q, severity, selectedCategory]);
@@ -138,7 +139,7 @@ export function AlertsPage() {
   const flaggedHarmful = alerts.filter((a) => a.severity === "CRITICAL" || a.severity === "HIGH").length;
   const reportedCases = alerts.filter((a) => a.status.toLowerCase() !== "new").length;
   const avgResponse = alerts.length
-    ? `${(alerts.reduce((sum, a) => sum + a.fusion_score, 0) / alerts.length).toFixed(1)}`
+    ? `${(alerts.reduce((sum: number, a: AlertSummary) => sum + Number(a.fusion_score ?? 0), 0) / alerts.length).toFixed(1)}`
     : "0.0";
 
   return (

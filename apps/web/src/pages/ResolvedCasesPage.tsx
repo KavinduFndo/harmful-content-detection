@@ -50,8 +50,8 @@ export function ResolvedCasesPage() {
                 <span className="tag tag-resolved">RESOLVED</span>
                 <span className="muted">{parseApiDate(alert.created_at).toLocaleString()}</span>
               </div>
-              <div className="feed-title">{alert.category.replaceAll("_", " ")}</div>
-              <div className="feed-sub">Risk {alert.fusion_score.toFixed(2)} • Alert #{alert.id}</div>
+              <div className="feed-title">{(alert.category ?? "").replaceAll("_", " ")}</div>
+              <div className="feed-sub">Risk {Number(alert.fusion_score ?? 0).toFixed(2)} • Alert #{alert.id}</div>
               <div className="feed-actions">
                 <Link className="action-btn view" to={`/alerts/${alert.id}`}>View</Link>
               </div>

@@ -47,7 +47,7 @@ export function AlertDetailPage() {
     return category
       .replaceAll("_", " ")
       .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   }
 
@@ -79,7 +79,7 @@ export function AlertDetailPage() {
     const [label, score] = value.split(":");
     const niceLabel = label
       .replaceAll("_", " ")
-      .replace(/\b\w/g, (c) => c.toUpperCase());
+      .replace(/\b\w/g, (c: string) => c.toUpperCase());
     if (!score) return niceLabel;
     const pct = Math.round(Number(score) * 100);
     return Number.isFinite(pct) ? `${niceLabel} ${pct}%` : niceLabel;
@@ -192,7 +192,7 @@ export function AlertDetailPage() {
                 <div>
                   <strong>Top detections</strong>
                   <div className="evidence-chip-list">
-                    {topDetections.slice(0, 10).map((detection) => (
+                    {topDetections.slice(0, 10).map((detection: string) => (
                       <span key={detection} className="evidence-chip">{simplifyDetectionLabel(detection)}</span>
                     ))}
                   </div>
@@ -200,7 +200,7 @@ export function AlertDetailPage() {
               )}
               {evidenceFrames.length > 0 ? (
                 <div className="evidence-frame-grid">
-                {evidenceFrames.slice(0, 8).map((frameUrl) => (
+              {evidenceFrames.slice(0, 8).map((frameUrl: string) => (
                   <img
                     key={frameUrl}
                     src={`${API_BASE}${frameUrl}`}
