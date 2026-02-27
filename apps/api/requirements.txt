@@ -15,8 +15,4 @@ pytest-cov
 opencv-python-headless
 numpy
 pillow
-ultralytics
-transformers
-torch
 email-validator
-openai-whisper
