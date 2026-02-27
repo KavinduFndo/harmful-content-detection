@@ -52,7 +52,7 @@ services:
         value: "30"
       - key: CORS_ORIGINS
         scope: RUN_TIME
-        value: https://REPLACE_ME_VERCEL_DOMAIN
+        value: https://harmful-content-detection-2qvs.vercel.app
 
 workers:
   - name: worker
