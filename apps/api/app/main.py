@@ -30,13 +30,27 @@ def _start_alert_subscription(loop: asyncio.AbstractEventLoop) -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
-    Path(settings.media_root).mkdir(parents=True, exist_ok=True)
-    Path(settings.demo_input_dir).mkdir(parents=True, exist_ok=True)
-    loop = asyncio.get_running_loop()
-    _start_alert_subscription(loop)
+    import sys
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"[startup] DB create_all failed: {e}", file=sys.stderr, flush=True)
+    try:
+        Path(settings.media_root).mkdir(parents=True, exist_ok=True)
+        Path(settings.demo_input_dir).mkdir(parents=True, exist_ok=True)
+    except Exception as e:
+        print(f"[startup] mkdir failed: {e}", file=sys.stderr, flush=True)
+    try:
+        loop = asyncio.get_running_loop()
+        _start_alert_subscription(loop)
+    except Exception as e:
+        print(f"[startup] alert subscription failed: {e}", file=sys.stderr, flush=True)
     if settings.demo_mode:
-        start_demo_folder_watcher(SessionLocal)
+        try:
+            start_demo_folder_watcher(SessionLocal)
+        except Exception as e:
+            print(f"[startup] demo watcher failed: {e}", file=sys.stderr, flush=True)
+    print("[startup] API ready", file=sys.stderr, flush=True)
     yield
 
 
