@@ -55,6 +55,8 @@ app.include_router(ingest.router)
 app.include_router(users.router)
 app.include_router(debug.router)
 app.include_router(ws.router)
+# Ensure static mount directory exists at import time in cloud runtimes.
+Path(settings.media_root).mkdir(parents=True, exist_ok=True)
 app.mount("/storage", StaticFiles(directory=settings.media_root), name="storage")
 
 
